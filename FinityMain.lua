@@ -4,6 +4,20 @@ local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
+function FinityV2.require(Path)
+    if type(Path) == "string" then
+		Path = Path:gsub("\\", "/")
+		return loadstring(game:HttpGet("https://raw.githubusercontent.com/detourious/finityV2/master/"..Path, true))()
+	end
+end
+
+function FinityV2.create(Object)
+    if type(Object) == "string" then
+		Object = Object:gsub("\\", "/")
+		return loadstring(game:HttpGet("https://raw.githubusercontent.com/detourious/finityV2/master/Objects/"..Object..".lua", true))()()
+	end
+end
+
 function FinityV2.new(Name, Theme, Hierarchy) -- Constructor
 	local Finity = {} -- Main class
 	Finity.Directory = {} -- Home directory
@@ -46,7 +60,7 @@ function FinityV2.new(Name, Theme, Hierarchy) -- Constructor
 		end
 	end
 	
-	local Window = script.FinityV2:Clone()
+	local Window = FinityV2.create("Window")
 	Window.Container.Topbar.Title.Text = Name -- Set name 
 	Window.Parent = LocalPlayer.PlayerGui -- Temporary; testing
 	Finity.Window = Window
@@ -77,19 +91,19 @@ function FinityV2.new(Name, Theme, Hierarchy) -- Constructor
 	function Finity:LoadObject(Name, Data)
 		if Name and Data then
 			if Data.Type then
-				if script:FindFirstChild(Data.Type) then
-					local Object = script[Data.Type]:Clone()
-					Object.ClickableText.TextShadow.Text = Name
-					Object.ClickableText.Text = Name
-					
-					if script.Animations:FindFirstChild(Data.Type) then
-						require(script.Animations[Data.Type])(Object)
-					end
-					
-					require(script.Classes[Data.Type])(Object, Data)
-					
-					Object.Parent = ObjectHolder
+				local Object = FinityV2.create(Data.Type)
+				Object.ClickableText.TextShadow.Text = Name
+				Object.ClickableText.Text = Name
+				
+				local Animation = FinityV2.require("Animations\\"..Data.Type..".lua")
+				
+				if Animation then
+					Animation(Object)
 				end
+				
+				FinityV2.require("Classes\\"..Data.Type..".lua")(Object, Data)
+				
+				Object.Parent = ObjectHolder
 			end
 		end
 	end
@@ -116,8 +130,10 @@ function FinityV2.new(Name, Theme, Hierarchy) -- Constructor
 	function Finity:ApplyCrumbs(Object)
 		if Object then
 			Finity:ClearCrumbs()
+			
 			local Ancestors = {}
 			local Current = Object
+			
 			while true do
 				if Current.Parent then
 					table.insert(Ancestors, Current)
@@ -126,27 +142,40 @@ function FinityV2.new(Name, Theme, Hierarchy) -- Constructor
 					break
 				end
 			end
-			local function Reverse(tbl)
-				local tmp = {}
-				for i=#tbl, 0, -1 do
-					table.insert(tmp, tbl[i])
+			
+			local function Reverse(Table)
+				local Temp = {}
+				
+				for Iterator = #Table, 0, -1 do
+					table.insert(Temp, Table[Iterator])
 				end
-				return tmp
+				
+				return Temp
 			end
-			for _,Ancestor in next, Reverse(Ancestors) do 
-				local Crumb = script.Crumb:Clone()
+			
+			for _, Ancestor in next, Reverse(Ancestors) do 
+				local Crumb = FinityV2.create("Crumb")
 				
 				Crumb.Parent = Breadcrumbs
 				Crumb.CrumbText.Text = Ancestor.Name
 				Crumb.Name = #Breadcrumbs:GetChildren() + 1
+				
 				Crumb.MouseButton1Click:connect(function()
 					self:OpenFolder(Ancestor)
 					self:ApplyCrumbs(Ancestor)
 				end)
-				require(script.Animations.Crumb)(Crumb)
+				
+				FinityV2.require("Animations\\Crumb.lua")(Crumb)
 			end
 		end
 	end
+	
+	FinityV2.require("Animations\\Button.lua")(Breadcrumbs.Parent.HomeDirectory)
+	
+	Breadcrumbs.Parent.HomeDirectory.MouseButton1Click:Connect(function()
+		Finity:ClearCrumbs()
+		Finity:OpenFolder(Finity.Directory)
+	end)
 	
 	shared.Finity = Finity
 	
