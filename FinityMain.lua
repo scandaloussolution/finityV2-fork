@@ -168,7 +168,11 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 		end
 	end
 
+	print("Loaded functions.")
+
 	shared.Finity = Finity
+
+	print("Shared Finity.")
 
 	Finity.Repository.Objects = {
 		["Button"] = FinityV2.create("Button"),
