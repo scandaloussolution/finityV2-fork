@@ -143,6 +143,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 				self:ClearFolder()
 				
 				for ChildName, ChildData in next, Directory do
+					print(ChildName, ChildData.Type)
 					self:LoadObject(ChildName, ChildData)
 				end
 			elseif Directory.Type and Directory.Type == "Folder" then
