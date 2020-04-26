@@ -1,4 +1,4 @@
-repeat wait() until shared.Finity
+repeat wait() print("Finity not found.. waiting...") until shared.Finity
 
 local Finity = shared.Finity
 

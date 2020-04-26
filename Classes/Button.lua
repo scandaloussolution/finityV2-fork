@@ -1,3 +1,5 @@
+repeat wait() print("Finity not found.. waiting...") until shared.Finity
+
 local Finity = shared.Finity
 
 return function(Object, Data)
