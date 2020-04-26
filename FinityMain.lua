@@ -34,11 +34,9 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 
 	Finity.Repository.Classes = {
 		["Button"] = FinityV2.require("Classes\\Button.lua"),
-		["Crumb"] = FinityV2.require("Classes\\Crumb.lua"),
 		["Folder"] = FinityV2.require("Classes\\Folder.lua"),
 		["TextBox"] = FinityV2.require("Classes\\TextBox.lua"),
 		["Toggle"] = FinityV2.require("Classes\\Toggle.lua"),
-		["Window"] = FinityV2.require("Classes\\Windo.luaw")
 	}
 
 	Finity.Repository.Animations = {
@@ -47,7 +45,6 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 		["Folder"] = FinityV2.require("Animations\\Folder.lua"),
 		["TextBox"] = FinityV2.require("Animations\\TextBox.lua"),
 		["Toggle"] = FinityV2.require("Animations\\Toggle.lua"),
-		["Window"] = FinityV2.require("Animations\\Windo.luaw")
 	}
 
 	
