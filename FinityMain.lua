@@ -22,31 +22,6 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	local Finity = {} -- Main class
 	Finity.Directory = {} -- Home directory
 	Finity.Repository = {}
-
-	Finity.Repository.Objects = {
-		["Button"] = FinityV2.create("Button"),
-		["Crumb"] = FinityV2.create("Crumb"),
-		["Folder"] = FinityV2.create("Folder"),
-		["TextBox"] = FinityV2.create("TextBox"),
-		["Toggle"] = FinityV2.create("Toggle"),
-		["Window"] = FinityV2.create("Window")
-	}
-
-	Finity.Repository.Classes = {
-		["Button"] = FinityV2.require("Classes\\Button.lua"),
-		["Folder"] = FinityV2.require("Classes\\Folder.lua"),
-		["TextBox"] = FinityV2.require("Classes\\TextBox.lua"),
-		["Toggle"] = FinityV2.require("Classes\\Toggle.lua"),
-	}
-
-	Finity.Repository.Animations = {
-		["Button"] = FinityV2.require("Animations\\Button.lua"),
-		["Crumb"] = FinityV2.require("Animations\\Crumb.lua"),
-		["Folder"] = FinityV2.require("Animations\\Folder.lua"),
-		["TextBox"] = FinityV2.require("Animations\\TextBox.lua"),
-		["Toggle"] = FinityV2.require("Animations\\Toggle.lua"),
-	}
-
 	
 	if not Name then -- If a name wasn't passed
 		Name = "Finity - 2.0.0" -- Set the default name
@@ -86,13 +61,9 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 		end
 	end
 	
-	local Window = Finity.Repository.Objects["Window"]:Clone()
-	Window.Container.Topbar.Title.Text = Name -- Set name 
-	Window.Parent = game.Players.LocalPlayer.PlayerGui -- Temporary; testing
-	Finity.Window = Window
-	
-	local ObjectHolder = Window.Container.Browser.Directory.ObjectHolder
-	local Breadcrumbs = Window.Container.Browser.Directory.Breadcrumbs
+	local Window
+	local ObjectHolder
+	local Breadcrumbs
 	
 	function Finity:ClearFolder()
 		local Objects = ObjectHolder:GetChildren()
@@ -196,15 +167,46 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 			end
 		end
 	end
+
+	shared.Finity = Finity
+
+	Finity.Repository.Objects = {
+		["Button"] = FinityV2.create("Button"),
+		["Crumb"] = FinityV2.create("Crumb"),
+		["Folder"] = FinityV2.create("Folder"),
+		["TextBox"] = FinityV2.create("TextBox"),
+		["Toggle"] = FinityV2.create("Toggle"),
+		["Window"] = FinityV2.create("Window")
+	}
+
+	Finity.Repository.Classes = {
+		["Button"] = FinityV2.require("Classes\\Button.lua"),
+		["Folder"] = FinityV2.require("Classes\\Folder.lua"),
+		["TextBox"] = FinityV2.require("Classes\\TextBox.lua"),
+		["Toggle"] = FinityV2.require("Classes\\Toggle.lua"),
+	}
+
+	Finity.Repository.Animations = {
+		["Button"] = FinityV2.require("Animations\\Button.lua"),
+		["Crumb"] = FinityV2.require("Animations\\Crumb.lua"),
+		["Folder"] = FinityV2.require("Animations\\Folder.lua"),
+		["TextBox"] = FinityV2.require("Animations\\TextBox.lua"),
+		["Toggle"] = FinityV2.require("Animations\\Toggle.lua"),
+	}
+
+	Window = Finity.Repository.Objects["Window"]:Clone()
+	Window.Container.Topbar.Title.Text = Name -- Set name 
+	Window.Parent = game.Players.LocalPlayer.PlayerGui -- Temporary; testing
+	Finity.Window = Window
 	
+	ObjectHolder = Window.Container.Browser.Directory.ObjectHolder
+	Breadcrumbs = Window.Container.Browser.Directory.Breadcrumbs
 	Finity.Repository.Animations["Button"](Breadcrumbs.Parent.HomeDirectory)
 	
 	Breadcrumbs.Parent.HomeDirectory.MouseButton1Click:Connect(function()
 		Finity:ClearCrumbs()
 		Finity:OpenFolder(Finity.Directory)
 	end)
-	
-	shared.Finity = Finity
 	
 	return Finity
 end
