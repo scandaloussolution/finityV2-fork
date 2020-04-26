@@ -120,6 +120,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 				local Object = Finity.Repository.Objects[Data.Type]:Clone()
 				Object.ClickableText.TextShadow.Text = Name
 				Object.ClickableText.Text = Name
+				Object.Parent = ObjectHolder
 				
 				local Animation = Finity.Repository.Animations[Data.Type]
 				
@@ -128,9 +129,6 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 				end
 				
 				Finity.Repository.Classes[Data.Type](Object, Data)
-				
-				Object.Parent = ObjectHolder
-				print(Object:GetFullName())
 			end
 		end
 	end
