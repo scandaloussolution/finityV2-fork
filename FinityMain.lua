@@ -7,14 +7,14 @@ local LocalPlayer = Players.LocalPlayer
 function FinityV2.require(Path)
     if type(Path) == "string" then
 		Path = Path:gsub("\\", "/")
-		return loadstring(game:HttpGet("https://raw.githubusercontent.com/detourious/finityV2/master/"..Path.."?token=".. FinityV2.AuthToken, true))()
+		return loadstring(game:HttpGet("https://raw.githubusercontent.com/detourious/finityV2/master/"..Path, true))()
 	end
 end
 
 function FinityV2.create(Object)
     if type(Object) == "string" then
 		Object = Object:gsub("\\", "/")
-		return loadstring(game:HttpGet("https://raw.githubusercontent.com/detourious/finityV2/master/Objects/"..Object..".lua?token=".. FinityV2.AuthToken, true))()()
+		return loadstring(game:HttpGet("https://raw.githubusercontent.com/detourious/finityV2/master/Objects/"..Object..".lua", true))()()
 	end
 end
 
