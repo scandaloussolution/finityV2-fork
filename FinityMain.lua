@@ -1,8 +1,13 @@
 local FinityV2 = {}
 
+local LocalPlayer = Players.LocalPlayer
+
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
-local LocalPlayer = Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+local Mouse = LocalPlayer:GetMouse()
 
 function FinityV2.require(Path)
     if type(Path) == "string" then
@@ -30,7 +35,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	if not Theme then
 		Theme = {} --Create Empty Object
 	end
-	
+
 	if Hierarchy then
 		if type(Hierarchy) == "table" then
 			Finity.Directory = Hierarchy --Define Finity.Directory as given Hierarchy
@@ -64,6 +69,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	local Window
 	local ObjectHolder
 	local Breadcrumbs
+	local HoveringTopbar, Dragging = false, false
 	
 	function Finity:ClearFolder()
 		local Objects = ObjectHolder:GetChildren()
@@ -106,19 +112,14 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	end
 	
 	function Finity:OpenFolder(Directory)
-		print("hi")
 		if Directory then
-			print("exists")
 			if not Directory.Type and not Directory.Children then
-				print("is a table of objects")
 				self:ClearFolder()
 				
 				for ChildName, ChildData in next, Directory do
-					print(ChildName, ChildData.Type)
 					self:LoadObject(ChildName, ChildData)
 				end
 			elseif Directory.Type and Directory.Type == "Folder" then
-				print("is folder object")
 				self:OpenFolder(Directory.Children)
 				self:ApplyCrumbs(Directory)
 			end
@@ -163,9 +164,25 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 					self:ApplyCrumbs(Ancestor)
 				end)
 				
-				Finity.Repository.Animations["Crumb"](Crumb)
+				if Ancestor ~= Object then
+					Crumb.Arrow.TextTransparency = 0
+					Crumb.CrumbText.TextTransparency = 0
+				else
+					Finity.Repository.Animations["Crumb"](Crumb)
+				end
 			end
 		end
+	end
+
+	local function DragWindow()
+		spawn(function()
+			while HoveringTopbar and Dragging do
+				wait()
+				if Finity.Window then
+					Finity.Window:TweenPosition(UDim2.new(0, Mouse.X, 0, Mouse.Y), "Out", "Sine", 0.1, true)
+				end
+			end
+		end)
 	end
 
 	print("Loaded functions.")
@@ -200,16 +217,45 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 
 	Window = Finity.Repository.Objects["Window"]:Clone()
 	Window.Container.Topbar.Title.Text = Name -- Set name 
-	Window.Parent = game.Players.LocalPlayer.PlayerGui -- Temporary; testing
+
+	if RunService:IsStudio() then
+		Window.Parent = LocalPlayer.PlayerGui
+	else
+		Window.Parent = game:GetService("CoreGui")
+	end
+
 	Finity.Window = Window
 	
 	ObjectHolder = Window.Container.Browser.Directory.ObjectHolder
 	Breadcrumbs = Window.Container.Browser.Directory.Breadcrumbs
+	
 	Finity.Repository.Animations["Button"](Breadcrumbs.Parent.HomeDirectory)
+	Finity.Repository.Animations["Button"](Window.Container.Topbar.Close)
+	Finity.Repository.Animations["Button"](Window.Container.Topbar.Sidebar)
 	
 	Breadcrumbs.Parent.HomeDirectory.MouseButton1Click:Connect(function()
 		Finity:ClearCrumbs()
 		Finity:OpenFolder(Finity.Directory)
+	end)
+	
+	Window.Topbar.Close.MouseButton1Click:Connect(function()
+		-- closing stuff
+	end)
+
+	Window.Topbar.MouseEnter:Connect(function()
+		HoveringTopbar = true
+	end)
+
+	Window.Topbar.MouseLeave:Connect(function()
+		HoveringTopbar = false
+	end)
+
+	Mouse.Button1Down:Connect(function()
+		Dragging = true
+	end)
+
+	Mouse.Button1Up:Connect(function()
+		Dragging = false
 	end)
 	
 	return Finity
