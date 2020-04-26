@@ -19,10 +19,37 @@ function FinityV2.create(Object)
 end
 
 function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
-	FinityV2.AuthToken = AuthToken
-	
 	local Finity = {} -- Main class
 	Finity.Directory = {} -- Home directory
+	Finity.Repository = {}
+
+	Finity.Repository.Objects = {
+		["Button"] = FinityV2.create("Button"),
+		["Crumb"] = FinityV2.create("Crumb"),
+		["Folder"] = FinityV2.create("Folder"),
+		["TextBox"] = FinityV2.create("TextBox"),
+		["Toggle"] = FinityV2.create("Toggle"),
+		["Window"] = FinityV2.create("Window")
+	}
+
+	Finity.Repository.Classes = {
+		["Button"] = FinityV2.require("Classes\\Button.lua"),
+		["Crumb"] = FinityV2.require("Classes\\Crumb.lua"),
+		["Folder"] = FinityV2.require("Classes\\Folder.lua"),
+		["TextBox"] = FinityV2.require("Classes\\TextBox.lua"),
+		["Toggle"] = FinityV2.require("Classes\\Toggle.lua"),
+		["Window"] = FinityV2.require("Classes\\Windo.luaw")
+	}
+
+	Finity.Repository.Animations = {
+		["Button"] = FinityV2.require("Animations\\Button.lua"),
+		["Crumb"] = FinityV2.require("Animations\\Crumb.lua"),
+		["Folder"] = FinityV2.require("Animations\\Folder.lua"),
+		["TextBox"] = FinityV2.require("Animations\\TextBox.lua"),
+		["Toggle"] = FinityV2.require("Animations\\Toggle.lua"),
+		["Window"] = FinityV2.require("Animations\\Windo.luaw")
+	}
+
 	
 	if not Name then -- If a name wasn't passed
 		Name = "Finity - 2.0.0" -- Set the default name
@@ -62,7 +89,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 		end
 	end
 	
-	local Window = FinityV2.create("Window")
+	local Window = Finity.Repository.Objects["Window"]:Clone()
 	Window.Container.Topbar.Title.Text = Name -- Set name 
 	Window.Parent = LocalPlayer.PlayerGui -- Temporary; testing
 	Finity.Window = Window
@@ -93,17 +120,17 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	function Finity:LoadObject(Name, Data)
 		if Name and Data then
 			if Data.Type then
-				local Object = FinityV2.create(Data.Type)
+				local Object = Finity.Repository.Objects[Data.Type]:Clone()
 				Object.ClickableText.TextShadow.Text = Name
 				Object.ClickableText.Text = Name
 				
-				local Animation = FinityV2.require("Animations\\"..Data.Type..".lua")
+				local Animation = Finity.Repository.Animations[Data.Type]
 				
 				if Animation then
 					Animation(Object)
 				end
 				
-				FinityV2.require("Classes\\"..Data.Type..".lua")(Object, Data)
+				Finity.Repository.Classes[Data.Type](Object, Data)
 				
 				Object.Parent = ObjectHolder
 			end
@@ -156,7 +183,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 			end
 			
 			for _, Ancestor in next, Reverse(Ancestors) do 
-				local Crumb = FinityV2.create("Crumb")
+				local Crumb = Finity.Repository.Objects["Crumb"]:Clone()
 				
 				Crumb.Parent = Breadcrumbs
 				Crumb.CrumbText.Text = Ancestor.Name
@@ -167,12 +194,12 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 					self:ApplyCrumbs(Ancestor)
 				end)
 				
-				FinityV2.require("Animations\\Crumb.lua")(Crumb)
+				Finity.Repository.Animations["Crumb"](Crumb)
 			end
 		end
 	end
 	
-	FinityV2.require("Animations\\Button.lua")(Breadcrumbs.Parent.HomeDirectory)
+	Finity.Repository.Animations["Button"](Breadcrumbs.Parent.HomeDirectory)
 	
 	Breadcrumbs.Parent.HomeDirectory.MouseButton1Click:Connect(function()
 		Finity:ClearCrumbs()
