@@ -1,5 +1,6 @@
+repeat wait() until shared.Finity
+
 local Finity = shared.Finity
-print(Finity)
 
 return function(Object, Data)
 	Object.MouseButton1Click:Connect(function()
