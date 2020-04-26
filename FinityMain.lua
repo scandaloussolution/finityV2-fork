@@ -1,12 +1,11 @@
 local FinityV2 = {}
 
-local LocalPlayer = Players.LocalPlayer
-
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
+local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 
 function FinityV2.require(Path)
