@@ -88,7 +88,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	
 	local Window = Finity.Repository.Objects["Window"]:Clone()
 	Window.Container.Topbar.Title.Text = Name -- Set name 
-	Window.Parent = LocalPlayer.PlayerGui -- Temporary; testing
+	Window.Parent = game.Players.LocalPlayer.PlayerGui -- Temporary; testing
 	Finity.Window = Window
 	
 	local ObjectHolder = Window.Container.Browser.Directory.ObjectHolder
@@ -117,6 +117,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	function Finity:LoadObject(Name, Data)
 		if Name and Data then
 			if Data.Type then
+				local ObjectHolder = Window.Container.Browser.Directory.ObjectHolder
 				local Object = Finity.Repository.Objects[Data.Type]:Clone()
 				Object.ClickableText.TextShadow.Text = Name
 				Object.ClickableText.Text = Name
