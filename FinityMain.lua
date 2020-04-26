@@ -130,6 +130,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 				Finity.Repository.Classes[Data.Type](Object, Data)
 				
 				Object.Parent = ObjectHolder
+				print(Object:GetFullName())
 			end
 		end
 	end
