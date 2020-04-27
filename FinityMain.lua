@@ -166,6 +166,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 				if Ancestor ~= Object then
 					Crumb.Arrow.TextTransparency = 0
 					Crumb.CrumbText.TextTransparency = 0
+					Crumb.Size = UDim2.new(0, 20 + Crumb.CrumbText.TextBounds.X, 1, 0)
 				else
 					Finity.Repository.Animations["Crumb"](Crumb)
 				end
