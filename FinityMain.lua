@@ -238,15 +238,15 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 		Finity:OpenFolder(Finity.Directory)
 	end)
 	
-	Window.Topbar.Close.MouseButton1Click:Connect(function()
+	Window.Container.Topbar.Close.MouseButton1Click:Connect(function()
 		-- closing stuff
 	end)
 
-	Window.Topbar.MouseEnter:Connect(function()
+	Window.Container.Topbar.MouseEnter:Connect(function()
 		HoveringTopbar = true
 	end)
 
-	Window.Topbar.MouseLeave:Connect(function()
+	Window.Container.Topbar.MouseLeave:Connect(function()
 		HoveringTopbar = false
 	end)
 
