@@ -178,13 +178,13 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 		spawn(function()
 			while Dragging and MouseOffset do
 				if Finity.Window then
-					Finity.Window:TweenPosition(UDim2.new(0, Mouse.X + MouseOffset.X, 0, Mouse.Y + MouseOffset.Y), "Out", "Sine", 0.1, true)
+					Finity.Window.Container:TweenPosition(UDim2.new(0, Mouse.X + MouseOffset.X, 0, Mouse.Y + MouseOffset.Y), "Out", "Sine", 0.1, true)
 				end
 				wait()
 			end
 
 			if Finity.Window then
-				Finity.Window:TweenPosition(UDim2.new(0, Mouse.X + MouseOffset.X, 0, Mouse.Y + MouseOffset.Y), "Out", "Sine", 0.1, true)
+				Finity.Window.Container:TweenPosition(UDim2.new(0, Mouse.X + MouseOffset.X, 0, Mouse.Y + MouseOffset.Y), "Out", "Sine", 0.1, true)
 			end
 			MouseOffset = nil
 		end)
@@ -257,13 +257,15 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 
 	UserInputService.InputEnded:Connect(function(Input)
 		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-			MouseOffset = {
-				X = Mouse.X - Window.Container.Topbar.AbsolutePosition.X,
-				Y = Mouse.Y - Window.Container.Topbar.AbsolutePosition.Y
-			}
+			if HoveringTopbar then
+				MouseOffset = {
+					X = Mouse.X - Window.Container.Topbar.AbsolutePosition.X,
+					Y = Mouse.Y - Window.Container.Topbar.AbsolutePosition.Y
+				}
 
-			Dragging = true
-			DragWindow()
+				Dragging = true
+				DragWindow()
+			end
 		end
 	end)
 
