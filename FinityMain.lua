@@ -26,7 +26,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	local Finity = {} -- Main class
 	Finity.Directory = {} -- Home directory
 	Finity.Repository = {}
-	Finity.Version = "2.0.0"
+	Finity.Version = "2.0.1"
 	
 	if not Name then -- If a name wasn't passed
 		Name = "Finity - 2.0.0" -- Set the default name
@@ -179,13 +179,13 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 		spawn(function()
 			while Dragging and MouseOffset do
 				if Finity.Window then
-					Finity.Window.Container:TweenPosition(UDim2.new(0, Mouse.X + MouseOffset.X, 0, Mouse.Y + MouseOffset.Y), "Out", "Sine", 0.1, true)
+					Finity.Window.Container:TweenPosition(UDim2.new(0, Mouse.X - MouseOffset.X, 0, Mouse.Y - MouseOffset.Y), "Out", "Sine", 0.1, true)
 				end
 				wait()
 			end
 
 			if Finity.Window then
-				Finity.Window.Container:TweenPosition(UDim2.new(0, Mouse.X + MouseOffset.X, 0, Mouse.Y + MouseOffset.Y), "Out", "Sine", 0.1, true)
+				Finity.Window.Container:TweenPosition(UDim2.new(0, Mouse.X - MouseOffset.X, 0, Mouse.Y - MouseOffset.Y), "Out", "Sine", 0.1, true)
 			end
 			MouseOffset = nil
 		end)
@@ -256,7 +256,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 		HoveringTopbar = false
 	end)
 
-	UserInputService.InputEnded:Connect(function(Input)
+	UserInputService.InputBegan:Connect(function(Input)
 		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
 			if HoveringTopbar then
 				MouseOffset = {
