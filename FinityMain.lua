@@ -26,7 +26,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	local Finity = {} -- Main class
 	Finity.Directory = {} -- Home directory
 	Finity.Repository = {}
-	Finity.Version = "2.0.1"
+	Finity.Version = "2.0.1a"
 	
 	if not Name then -- If a name wasn't passed
 		Name = "Finity - 2.0.0" -- Set the default name
