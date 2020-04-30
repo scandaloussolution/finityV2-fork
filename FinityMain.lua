@@ -68,7 +68,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	local Window
 	local ObjectHolder
 	local Breadcrumbs
-	local HoveringTopbar, Dragging = false, false
+	local HoveringTopbar, Dragging, MouseOffset = false, false
 	
 	function Finity:ClearFolder()
 		local Objects = ObjectHolder:GetChildren()
@@ -176,12 +176,17 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 
 	local function DragWindow()
 		spawn(function()
-			while HoveringTopbar and Dragging do
-				wait()
+			while Dragging and MouseOffset do
 				if Finity.Window then
-					Finity.Window:TweenPosition(UDim2.new(0, Mouse.X, 0, Mouse.Y), "Out", "Sine", 0.1, true)
+					Finity.Window:TweenPosition(UDim2.new(0, Mouse.X + MouseOffset.X, 0, Mouse.Y + MouseOffset.Y), "Out", "Sine", 0.1, true)
 				end
+				wait()
 			end
+
+			if Finity.Window then
+				Finity.Window:TweenPosition(UDim2.new(0, Mouse.X + MouseOffset.X, 0, Mouse.Y + MouseOffset.Y), "Out", "Sine", 0.1, true)
+			end
+			MouseOffset = nil
 		end)
 	end
 
@@ -250,12 +255,22 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 		HoveringTopbar = false
 	end)
 
-	Mouse.Button1Down:Connect(function()
-		Dragging = true
+	UserInputService.InputEnded:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+			MouseOffset = {
+				X = Mouse.X - Window.Container.Topbar.AbsolutePosition.X,
+				Y = Mouse.Y - Window.Container.Topbar.AbsolutePosition.Y
+			}
+
+			Dragging = true
+			DragWindow()
+		end
 	end)
 
-	Mouse.Button1Up:Connect(function()
-		Dragging = false
+	UserInputService.InputEnded:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+			Dragging = false
+		end
 	end)
 	
 	return Finity
