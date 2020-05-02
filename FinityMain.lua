@@ -50,14 +50,14 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 						
 						if Object.Type == "Folder" then
 							for _, Child in ipairs(Object.Children) do
-								Scan(Child, Object, Object.Name)
+								Scan(Child, Object, Child.Name)
 							end 
 						end
 					else
 						Finity.Directory.Name = "Home"
 						
 						for _, Child in ipairs(Object) do
-							Scan(Child, Object, Object.Name)
+							Scan(Child, Object, Child.Name)
 						end 
 					end
 				end
