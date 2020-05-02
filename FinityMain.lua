@@ -29,7 +29,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	Finity.Version = "2.0.1a"
 	
 	if not Name then -- If a name wasn't passed
-		Name = "Finity - 2.0.0" -- Set the default name
+		Name = "Finity - " .. Finity.Version -- Set the default name
 	end
 	
 	if not Theme then
@@ -39,6 +39,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	if Hierarchy then
 		if type(Hierarchy) == "table" then
 			Finity.Directory = Hierarchy --Define Finity.Directory as given Hierarchy
+
 			local function Scan(Object, Parent, Name)
 				if type(Object) == "table" then
 					if Object.Type then
@@ -48,15 +49,15 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 						print("Scanning", Name, "with", Parent.Name)
 						
 						if Object.Type == "Folder" then
-							for Name, Child in next, Object.Children do
-								Scan(Child, Object, Name)
+							for _, Child in ipairs(Object.Children) do
+								Scan(Child, Object, Object.Name)
 							end 
 						end
 					else
 						Finity.Directory.Name = "Home"
 						
-						for Name, Child in pairs(Object) do
-							Scan(Child, Object, Name)
+						for _, Child in ipairs(Object) do
+							Scan(Child, Object, Object.Name)
 						end 
 					end
 				end
@@ -116,8 +117,8 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 			if not Directory.Type and not Directory.Children then
 				self:ClearFolder()
 				
-				for ChildName, ChildData in next, Directory do
-					self:LoadObject(ChildName, ChildData)
+				for _, ChildData in ipairs(Directory) do
+					self:LoadObject(ChildData.Name, ChildData)
 				end
 			elseif Directory.Type and Directory.Type == "Folder" then
 				self:OpenFolder(Directory.Children)
