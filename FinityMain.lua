@@ -125,7 +125,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 				local Animation = Finity.Repository.Animations[Data.Type]
 				
 				if Animation then
-					Animation(Object)
+					Animation(Object, Data)
 				end
 				
 				Finity.Repository.Classes[Data.Type](Object, Data)
@@ -225,6 +225,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 		["Folder"] = FinityV2.create("Folder"),
 		["TextBox"] = FinityV2.create("TextBox"),
 		["Toggle"] = FinityV2.create("Toggle"),
+		["Slider"] = FinityV2.create("Slider"),
 		["Window"] = FinityV2.create("Window")
 	}
 
@@ -233,6 +234,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 		["Folder"] = FinityV2.require("Classes\\Folder.lua"),
 		["TextBox"] = FinityV2.require("Classes\\TextBox.lua"),
 		["Toggle"] = FinityV2.require("Classes\\Toggle.lua"),
+		["Slider"] = FinityV2.require("Classes\\Slider.lua"),
 	}
 
 	Finity.Repository.Animations = {
@@ -241,6 +243,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 		["Folder"] = FinityV2.require("Animations\\Folder.lua"),
 		["TextBox"] = FinityV2.require("Animations\\TextBox.lua"),
 		["Toggle"] = FinityV2.require("Animations\\Toggle.lua"),
+		["Slider"] = FinityV2.require("Animations\\Slider.lua"),
 	}
 
 	Window = Finity.Repository.Objects["Window"]:Clone()
@@ -298,7 +301,10 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 		end
 	end)
 	
+	Finity:OpenFolder(Finity.Directory)
+	
 	return Finity
 end
+
 
 return FinityV2

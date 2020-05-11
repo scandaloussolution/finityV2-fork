@@ -1,6 +1,6 @@
 local TweenService = game:GetService("TweenService")
 
-repeat wait() print("Finity not found.. waiting...") until shared.Finity
+repeat wait() until shared.Finity
 
 local Finity = shared.Finity
 
@@ -10,7 +10,6 @@ return function(Object, Data)
 		
 		if Data.Callback and type(Data.Callback) == "function" then
 			if Data.Value ~= nil then
-				print(Data, Data.Parent)
 				pcall(function()
 					Data.Callback(Data.Value)
 				end)
