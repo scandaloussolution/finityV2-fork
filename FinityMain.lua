@@ -1,5 +1,7 @@
 local FinityV2 = {}
 
+FinityV2.DeveloperMode = true
+
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -10,15 +12,34 @@ local Mouse = LocalPlayer:GetMouse()
 
 function FinityV2.require(Path)
     if type(Path) == "string" then
-		Path = Path:gsub("\\", "/")
-		return loadstring(game:HttpGet("https://raw.githubusercontent.com/detourious/finityV2/master/"..Path, true))()
+		if FinityV2.DeveloperMode then
+			Path = Path:sub(1, string.len(Path) - 4)
+			local Child = script
+			
+			for NextChild in string.gmatch(Path, "%a+") do
+				Child = Child:FindFirstChild(NextChild)
+			end
+			
+			if Child and Child:IsA("ModuleScript") then
+				return require(Child)
+			end
+		else
+			Path = Path:gsub("\\", "/")
+			return loadstring(game:HttpGet("https://raw.githubusercontent.com/detourious/finityV2/master/"..Path, true))()
+		end
 	end
 end
 
 function FinityV2.create(Object)
     if type(Object) == "string" then
-		Object = Object:gsub("\\", "/")
-		return loadstring(game:HttpGet("https://raw.githubusercontent.com/detourious/finityV2/master/Objects/"..Object..".lua", true))()()
+		if FinityV2.DeveloperMode then
+			if Object and script.Objects:FindFirstChild(Object):IsA("ModuleScript") then
+				return require(script.Objects[Object])()
+			end
+		else
+			Object = Object:gsub("\\", "/")
+			return loadstring(game:HttpGet("https://raw.githubusercontent.com/detourious/finityV2/master/Objects/"..Object..".lua", true))()()
+		end
 	end
 end
 
@@ -70,7 +91,7 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	local Window
 	local ObjectHolder
 	local Breadcrumbs
-	local HoveringTopbar, Dragging, MouseOffset = false, false
+	local HoveringTopbar, Dragging, MouseOffset = false, false, nil
 	
 	function Finity:ClearFolder()
 		local Objects = ObjectHolder:GetChildren()
