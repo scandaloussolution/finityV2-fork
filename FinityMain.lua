@@ -2,6 +2,8 @@ local FinityV2 = {}
 
 FinityV2.DeveloperMode = false
 
+print("monkey")
+
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
