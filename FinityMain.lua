@@ -1,6 +1,6 @@
 local FinityV2 = {}
 
-FinityV2.DeveloperMode = true
+FinityV2.DeveloperMode = false
 
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
