@@ -266,13 +266,14 @@ function FinityV2.new(Name, Theme, Hierarchy, AuthToken) -- Constructor
 	Finity.Repository.Animations["Button"](Window.Container.Topbar.Close)
 	Finity.Repository.Animations["Button"](Window.Container.Topbar.Sidebar)
 	
-	Breadcrumbs.Parent.HomeDirectory.MouseButton1Click:Connect(function()
+	Breadcrumbs.Parent.HomeDirectory:Destroy() -- not needed for now
+	--[[Breadcrumbs.Parent.HomeDirectory.MouseButton1Click:Connect(function()
 		Finity:ClearCrumbs()
 		Finity:OpenFolder(Finity.Directory)
-	end)
+	end)]]
 	
 	Window.Container.Topbar.Close.MouseButton1Click:Connect(function()
-		-- closing stuff
+		Window:Destroy()
 	end)
 
 	Window.Container.Topbar.MouseEnter:Connect(function()
