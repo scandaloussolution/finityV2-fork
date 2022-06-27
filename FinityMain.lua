@@ -27,7 +27,7 @@ function FinityV2.require(Path)
 			end
 		else
 			Path = Path:gsub("\\", "/")
-			return loadstring(game:HttpGet("https://raw.githubusercontent.com/detourious/finityV2/master/"..Path, true))()
+			return loadstring(game:HttpGet("https://raw.githubusercontent.com/scandaloussolution/finityV2-fork/master/"..Path, true))()
 		end
 	end
 end
@@ -40,7 +40,7 @@ function FinityV2.create(Object)
 			end
 		else
 			Object = Object:gsub("\\", "/")
-			return loadstring(game:HttpGet("https://raw.githubusercontent.com/detourious/finityV2/master/Objects/"..Object..".lua", true))()()
+			return loadstring(game:HttpGet("https://raw.githubusercontent.com/scandaloussolution/finityV2-fork/master/Objects/"..Object..".lua", true))()()
 		end
 	end
 end
